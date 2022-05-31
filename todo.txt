@@ -1,0 +1,12 @@
+
+- Write DTO classes.
+- Write DBO classes.
+- Write Service Classes.
+- Write Controller and Error Handler.
+- Write Docker File.
+- Write Unit Tests.
+- Use Swagger and OpenDoc on all endpoints.
+- Write Integration Tests
+- Compile checklist for production readiness. (put versioning)
+- Do thorough manual tests.
+- Write a concise descriptive README.
