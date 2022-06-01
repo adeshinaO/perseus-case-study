@@ -15,6 +15,7 @@ import co.adeshina.perseus.repository.PhoneNumberRepository;
 import co.adeshina.perseus.repository.UserRepository;
 import co.adeshina.perseus.service.UserService;
 import co.adeshina.perseus.util.EntityMapper;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,8 +43,32 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto createUser(NewUserDto createUserDto) {
-        User user = entityMapper.map(createUserDto, User.class);
+
+        User user = new User();
+        user.setLastName(createUserDto.getLastName());
+        user.setFirstName(createUserDto.getFirstName());
+
+        List<PhoneNumber> phoneNumbers = new ArrayList<>();
+        List<Email> emails = new ArrayList<>();
+
+        for (NewEmailDto emailDto: createUserDto.getEmails()) {
+            Email email = new Email();
+            email.setUser(user);
+            email.setEmail(emailDto.getEmail());
+            emails.add(email);
+        }
+
+        for (NewPhoneNumberDto phoneNumberDto: createUserDto.getPhoneNumbers()) {
+            PhoneNumber phoneNumber = new PhoneNumber();
+            phoneNumber.setUser(user);
+            phoneNumber.setPhoneNumber(phoneNumberDto.getPhoneNumber());
+            phoneNumbers.add(phoneNumber);
+        }
+
+        user.setEmails(emails);
+        user.setPhoneNumbers(phoneNumbers);
         user = userRepository.save(user);
+
         return entityMapper.map(user, UserDto.class);
     }
 
@@ -80,7 +105,7 @@ public class UserServiceImpl implements UserService {
                                   .orElseThrow(() -> new InvalidEntityIdException("No user with given ID"));
 
         Email email = new Email();
-        email.setMail(createEmailDto.getEmail());
+        email.setEmail(createEmailDto.getEmail());
         List<Email> emails = user.getEmails();
         emails.add(email);
         user = userRepository.save(user);

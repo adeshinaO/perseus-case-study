@@ -19,8 +19,8 @@ public class Email {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-    @Column(name = "mail")
-    private String mail;
+    @Column(name = "mail_address")
+    private String email;
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false, updatable = false)

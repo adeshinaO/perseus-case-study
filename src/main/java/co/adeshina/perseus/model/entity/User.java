@@ -26,9 +26,9 @@ public class User {
     @Column(name = "last_name")
     private String lastName;
 
-    @OneToMany(cascade = {CascadeType.ALL}, mappedBy = "user")
+    @OneToMany(cascade = {CascadeType.REMOVE}, mappedBy = "user")
     private List<Email> emails;
 
-    @OneToMany(cascade = {CascadeType.ALL}, mappedBy = "user")
+    @OneToMany(cascade = {CascadeType.REMOVE}, mappedBy = "user")
     private List<PhoneNumber> phoneNumbers;
 }
