@@ -1,4 +1,4 @@
-package co.adeshina.perseus.model.dto;
+package co.adeshina.perseus.model.dto.response;
 
 import lombok.Data;
 
@@ -6,4 +6,5 @@ import lombok.Data;
 public class PhoneNumberDto {
     private long id;
     private String phoneNumber;
+    private long userId;
 }

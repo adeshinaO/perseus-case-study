@@ -1,8 +1,15 @@
 package co.adeshina.perseus.controller;
 
-import co.adeshina.perseus.model.dto.UserDto;
-import co.adeshina.perseus.model.entity.Email;
-import java.util.Optional;
+import co.adeshina.perseus.model.dto.request.NewEmailDto;
+import co.adeshina.perseus.model.dto.request.NewPhoneNumberDto;
+import co.adeshina.perseus.model.dto.request.NewUserDto;
+import co.adeshina.perseus.model.dto.response.EmailDto;
+import co.adeshina.perseus.model.dto.response.PhoneNumberDto;
+import co.adeshina.perseus.model.dto.response.UserDto;
+import co.adeshina.perseus.service.UserService;
+import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,34 +25,48 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/users")
 public class UserController {
 
-    @PostMapping("/create")
-    public ResponseEntity<UserDto> createUser(UserDto userDto) {
+    @Autowired
+    private UserService userService;
 
+    @PostMapping("/create")
+    public ResponseEntity<UserDto> createUser(NewUserDto createUserDto) {
+        UserDto userDto = userService.createUser(createUserDto);
+        return new ResponseEntity<>(userDto, HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<UserDto> getUser(@PathVariable("id") long id) {
-
+        UserDto userDto = userService.findById(id);
+        return ResponseEntity.ok(userDto);
     }
 
     @GetMapping("/find-by-name")
-    public ResponseEntity<Optional<UserDto>> findUserByName(@RequestParam("name") String name) {
-
+    public ResponseEntity<List<UserDto>> findUserByName(
+            @RequestParam("firstName") String firstName,
+            @RequestParam("lastName") String lastName) {
+        List<UserDto> users = userService.findByName(firstName, lastName);
+        return ResponseEntity.ok(users);
     }
 
     @PatchMapping("/{user_id}/add-phone-number")
-    public ResponseEntity<UserDto> addPhoneNumber(@RequestBody String body, @PathVariable("user_id") long userId) {
-
-    }
-
-    @DeleteMapping("{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable("id") long id) {
-        Email email;
-
+    public ResponseEntity<List<PhoneNumberDto>> addPhoneNumber(
+            @RequestBody NewPhoneNumberDto createPhoneNumberDto,
+            @PathVariable("user_id") long userId) {
+        List<PhoneNumberDto> userPhoneNumbers = userService.addPhoneNumber(userId, createPhoneNumberDto);
+        return ResponseEntity.ok(userPhoneNumbers);
     }
 
     @PatchMapping("/{user_id}/add-email")
-    public ResponseEntity<UserDto> addEmail(@RequestBody String body, @PathVariable("user_id") long userId) {
+    public ResponseEntity<List<EmailDto>> addEmail(
+            @RequestBody NewEmailDto createEmailDto,
+            @PathVariable("user_id") long userId) {
+        List<EmailDto> userEmails = userService.addEmail(userId, createEmailDto);
+        return ResponseEntity.ok(userEmails);
+    }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteUser(@PathVariable("id") long id) {
+        userService.delete(id);
+        return ResponseEntity.ok().build();
     }
 }
