@@ -9,14 +9,15 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>co.adeshina</groupId>
-	<artifactId>perseus-case-study</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<artifactId>perseus-rest-api</artifactId>
+	<version>1.0.0</version>
 	<name>Perseus - Simple API</name>
 	<description>Simple REST Service</description>
 	<properties>
 		<java.version>11</java.version>
 		<lombok.version>1.18.24</lombok.version>
 		<modelmapper.version>3.0.0</modelmapper.version>
+		<springdoc.version>1.6.4</springdoc.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -48,6 +49,11 @@
 			<groupId>org.modelmapper</groupId>
 			<artifactId>modelmapper</artifactId>
 			<version>${modelmapper.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-ui</artifactId>
+			<version>${springdoc.version}</version>
 		</dependency>
 	</dependencies>
 

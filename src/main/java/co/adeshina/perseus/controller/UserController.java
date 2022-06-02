@@ -7,6 +7,8 @@ import co.adeshina.perseus.model.dto.response.EmailDto;
 import co.adeshina.perseus.model.dto.response.PhoneNumberDto;
 import co.adeshina.perseus.model.dto.response.UserDto;
 import co.adeshina.perseus.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,18 +30,22 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @Operation(summary = "Create a new user")
     @PostMapping("/create")
-    public ResponseEntity<UserDto> createUser(@RequestBody NewUserDto createUserDto) {
+    public ResponseEntity<UserDto> createUser(
+            @Parameter(description = "User information") @RequestBody NewUserDto createUserDto) {
         UserDto userDto = userService.createUser(createUserDto);
         return new ResponseEntity<>(userDto, HttpStatus.CREATED);
     }
 
+    @Operation(summary = "Get user data")
     @GetMapping("/{id}")
     public ResponseEntity<UserDto> getUser(@PathVariable("id") long id) {
         UserDto userDto = userService.findById(id);
         return ResponseEntity.ok(userDto);
     }
 
+    @Operation(summary = "Find users with given first name and last name")
     @GetMapping("/find-by-name")
     public ResponseEntity<List<UserDto>> findUserByName(
             @RequestParam("firstName") String firstName,
@@ -48,6 +54,7 @@ public class UserController {
         return ResponseEntity.ok(users);
     }
 
+    @Operation(summary = "Add a phone number to an existing user")
     @PatchMapping("/{user_id}/add/phone")
     public ResponseEntity<List<PhoneNumberDto>> addPhoneNumber(
             @RequestBody NewPhoneNumberDto createPhoneNumberDto,
@@ -64,6 +71,7 @@ public class UserController {
         return ResponseEntity.ok(userEmails);
     }
 
+    @Operation(summary = "Delete an existing user")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable("id") long id) {
         userService.delete(id);

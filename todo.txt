@@ -1,3 +1,0 @@
-
-- Write Docker File.
-- Use Swagger and OpenDoc on all endpoints.
