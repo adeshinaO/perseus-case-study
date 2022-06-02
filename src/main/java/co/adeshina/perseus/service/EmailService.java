@@ -6,5 +6,5 @@ import org.springframework.stereotype.Service;
 
 @Service
 public interface EmailService {
-    EmailDto updatePhoneNumber(long id, NewEmailDto newEmailDto);
+    EmailDto updateEmail(long id, NewEmailDto newEmailDto);
 }

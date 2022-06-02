@@ -51,18 +51,25 @@ public class UserServiceImpl implements UserService {
         List<PhoneNumber> phoneNumbers = new ArrayList<>();
         List<Email> emails = new ArrayList<>();
 
-        for (NewEmailDto emailDto: createUserDto.getEmails()) {
-            Email email = new Email();
-            email.setUser(user);
-            email.setEmail(emailDto.getEmail());
-            emails.add(email);
+        List<NewEmailDto> newEmailDtos = createUserDto.getEmails();
+        List<NewPhoneNumberDto> phoneNumberDtos = createUserDto.getPhoneNumbers();
+
+        if (newEmailDtos != null) {
+            for (NewEmailDto emailDto: createUserDto.getEmails()) {
+                Email email = new Email();
+                email.setUser(user);
+                email.setEmail(emailDto.getEmail());
+                emails.add(email);
+            }
         }
 
-        for (NewPhoneNumberDto phoneNumberDto: createUserDto.getPhoneNumbers()) {
-            PhoneNumber phoneNumber = new PhoneNumber();
-            phoneNumber.setUser(user);
-            phoneNumber.setPhoneNumber(phoneNumberDto.getPhoneNumber());
-            phoneNumbers.add(phoneNumber);
+        if (phoneNumberDtos != null) {
+            for (NewPhoneNumberDto phoneNumberDto: createUserDto.getPhoneNumbers()) {
+                PhoneNumber phoneNumber = new PhoneNumber();
+                phoneNumber.setUser(user);
+                phoneNumber.setPhoneNumber(phoneNumberDto.getPhoneNumber());
+                phoneNumbers.add(phoneNumber);
+            }
         }
 
         user.setEmails(emails);
@@ -91,12 +98,18 @@ public class UserServiceImpl implements UserService {
 
         PhoneNumber phoneNumber = new PhoneNumber();
         phoneNumber.setPhoneNumber(createPhoneNumberDto.getPhoneNumber());
+        phoneNumber.setUser(user);
+        phoneNumberRepository.save(phoneNumber);
+
         List<PhoneNumber> userNumbers = user.getPhoneNumbers();
         userNumbers.add(phoneNumber);
+        user.setPhoneNumbers(userNumbers);
         user = userRepository.save(user);
 
-        return user.getPhoneNumbers().stream()
-                   .map(p -> entityMapper.map(p, PhoneNumberDto.class)).collect(Collectors.toList());
+        return user.getPhoneNumbers()
+                   .stream()
+                   .map(p -> entityMapper.map(p, PhoneNumberDto.class))
+                   .collect(Collectors.toList());
     }
 
     @Override
@@ -106,10 +119,17 @@ public class UserServiceImpl implements UserService {
 
         Email email = new Email();
         email.setEmail(createEmailDto.getEmail());
+        email.setUser(user);
+
         List<Email> emails = user.getEmails();
         emails.add(email);
+        user.setEmails(emails);
         user = userRepository.save(user);
-        return user.getEmails().stream().map(e -> entityMapper.map(e, EmailDto.class)).collect(Collectors.toList());
+
+        return user.getEmails()
+                   .stream()
+                   .map(e -> entityMapper.map(e, EmailDto.class))
+                   .collect(Collectors.toList());
     }
 
     @Override

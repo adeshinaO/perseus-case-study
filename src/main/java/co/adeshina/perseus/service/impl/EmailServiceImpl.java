@@ -22,7 +22,7 @@ public class EmailServiceImpl implements EmailService {
     }
 
     @Override
-    public EmailDto updatePhoneNumber(long id, NewEmailDto newEmailDto) {
+    public EmailDto updateEmail(long id, NewEmailDto newEmailDto) {
         Email email = emailRepository.findById(id).orElseThrow(() -> new InvalidEntityIdException("Invalid ID"));
         email.setEmail(newEmailDto.getEmail());
         email = emailRepository.save(email);

@@ -48,7 +48,7 @@ public class UserController {
         return ResponseEntity.ok(users);
     }
 
-    @PatchMapping("/{user_id}/add-phone-number")
+    @PatchMapping("/{user_id}/add/phone")
     public ResponseEntity<List<PhoneNumberDto>> addPhoneNumber(
             @RequestBody NewPhoneNumberDto createPhoneNumberDto,
             @PathVariable("user_id") long userId) {
@@ -56,7 +56,7 @@ public class UserController {
         return ResponseEntity.ok(userPhoneNumbers);
     }
 
-    @PatchMapping("/{user_id}/add-email")
+    @PatchMapping("/{user_id}/add/email")
     public ResponseEntity<List<EmailDto>> addEmail(
             @RequestBody NewEmailDto createEmailDto,
             @PathVariable("user_id") long userId) {
